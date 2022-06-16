@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "huffman.h"
 
-int id = 0;
+// int id = 0;
 
 NODE *getNode()
 {
@@ -14,7 +14,9 @@ NODE *getNode()
     }
     node->next = NULL;
     node->frequency = 1;
-    node->id = id++;
+    // node->id = id++;
+    node->left = NULL;
+    node->right = NULL;
     return node;
 }
 
@@ -69,80 +71,77 @@ void printList(NODE *head)
     {
         while (head != NULL)
         {
-            printf("id:%d => '%c':%d\n",head->id, head->character, head->frequency);
+            printf("'%c':%d\n", head->character, head->frequency);
             head = head->next;
         }
     }
 }
 
-/*
 // Merge Sort Function
-// void mergeSort(NODE **head)
-// {
-//     NODE *cur = *head;
-//     NODE *a, *b;
+void mergeSort(NODE **head)
+{
+    NODE *cur = *head;
+    NODE *a, *b;
 
-//     if((cur == NULL) || (cur -> next == NULL))
-//     {
-//         return;
-//     }
+    if ((cur == NULL) || (cur->next == NULL))
+    {
+        return;
+    }
 
-//     split(*head, &a, &b);
+    split(*head, &a, &b);
 
-//     mergeSort(&a);
-//     mergeSort(&b);
+    mergeSort(&a);
+    mergeSort(&b);
 
-//     *head = sortedMerge(a, b);
-// }
+    *head = sortedMerge(a, b);
+}
 
-// NODE *sortedMerge(NODE *a, NODE *b)
-// {
-//     NODE *result = NULL;
-//     if(a == NULL)
-//     {
-//         return b;
-//     }
-//     else if(b == NULL)
-//     {
-//         return a;
-//     }
+NODE *sortedMerge(NODE *a, NODE *b)
+{
+    NODE *result = NULL;
+    if (a == NULL)
+    {
+        return b;
+    }
+    else if (b == NULL)
+    {
+        return a;
+    }
 
-//     if (a -> frequency <= b -> frequency)
-//     {
-//         result = a;
-//         result -> next = sortedMerge(a -> next, b);
-//     }
-//     else
-//     {
-//         result = b;
-//         result -> next = sortedMerge(a, b -> next);
-//     }
-//     return result;
-// }
+    if (a->frequency <= b->frequency)
+    {
+        result = a;
+        result->next = sortedMerge(a->next, b);
+    }
+    else
+    {
+        result = b;
+        result->next = sortedMerge(a, b->next);
+    }
+    return result;
+}
 
-// void split(NODE *source, NODE **fhead, NODE **bhead)
-// {
-//     NODE *fast;
-//     NODE *slow;
-//     slow = source;
-//     fast = source -> next;
+void split(NODE *source, NODE **fhead, NODE **bhead)
+{
+    NODE *fast;
+    NODE *slow;
+    slow = source;
+    fast = source->next;
 
-//     while(fast != NULL)
-//     {
-//         fast = fast -> next;
-//         if(fast != NULL)
-//         {
-//             slow = slow -> next;
-//             fast = fast -> next;
-//         }
-//     }
+    while (fast != NULL)
+    {
+        fast = fast->next;
+        if (fast != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
 
-//     *fhead = source;
-//     *bhead = slow -> next;
-//     slow -> next = NULL;
-
-// }
-*/
+    *fhead = source;
+    *bhead = slow->next;
+    slow->next = NULL;
+}
 
 void encode(NODE **head, const char *filename)
 {
@@ -157,9 +156,89 @@ void encode(NODE **head, const char *filename)
             cur = addList(ch, cur);
         }
     }
-    printList(cur);
-    // mergeSort(&cur);
     // printList(cur);
+    mergeSort(&cur);
+    // printList(cur);
+    // printf("DONE");
+    createTree(&cur);
+    printTree(cur);
+    printf("DONE");
     // createTree(&cur);
     // minHeap(&cur);
+}
+
+void printTree(NODE *cur)
+{
+    // printf("REACHED");
+    if (cur != NULL)
+    {
+        printTree(cur->left);
+        printTree(cur->right);
+        if(cur -> left == NULL && cur -> right == NULL)
+        {
+        printf("%c:%d\n", cur->character, cur->frequency);
+        }
+    }
+}
+
+NODE *addNode(NODE *node1, NODE *node2)
+{
+    NODE *node = getNode();
+    node->frequency = node1->frequency + node2->frequency;
+    node->left = node1;
+    node->right = node2;
+    return node;
+}
+
+void updateList(NODE **head, NODE *node)
+{
+    NODE *cur = *head;
+    if (cur->frequency >= node->frequency)
+    {
+        node->next = cur;
+        *head = node;
+        return;
+    }
+    else
+    {
+        NODE *temp = cur;
+        cur = cur->next;
+        while (cur != NULL)
+        {
+            if (cur->frequency >= node->frequency)
+            {
+                node->next = cur;
+                temp->next = node;
+                return;
+            }
+            temp = cur;
+            cur = cur->next;
+        }
+        temp->next = node;
+    }
+}
+
+void createTree(NODE **head)
+{
+    NODE *cur1 = *head;
+    NODE *temp1;
+    NODE *temp2;
+    NODE *temp3;
+    if (cur1->next != NULL)
+    {
+        while (cur1 != NULL)
+        {
+            temp1 = cur1;
+            temp2 = cur1->next;
+            cur1 = temp2->next;
+            temp1->next = NULL;
+            temp2->next = NULL;
+            temp3 = addNode(temp1, temp2);
+            if (cur1 != NULL)
+            {
+                updateList(&cur1, temp3);
+            }
+        }
+        *head = temp3;
+    }
 }

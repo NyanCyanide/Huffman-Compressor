@@ -5,7 +5,9 @@
 typedef struct node{
     char character;
     int frequency;
-    int id;
+    // int id;
+    struct node *left;
+    struct node *right;
     struct node *next;
 }NODE;
 
@@ -63,6 +65,10 @@ NODE *sortedMerge(NODE *a, NODE *b);
 */
 void split(NODE *source, NODE **fhead, NODE **bhead);
 
+void printTree(NODE *cur);
+void createTree(NODE **head);
+void updateList(NODE **head, NODE *node);
+NODE *addNode(NODE *node1, NODE *node2);
 
 
 /* 
