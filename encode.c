@@ -156,27 +156,37 @@ void encode(NODE **head, const char *filename)
             cur = addList(ch, cur);
         }
     }
-    // printList(cur);
     mergeSort(&cur);
-    // printList(cur);
-    // printf("DONE");
     createTree(&cur);
-    printTree(cur);
-    printf("DONE");
-    // createTree(&cur);
-    // minHeap(&cur);
+    // printf("%c\n", cur ->left -> left-> character);
+    double val = 1;
+    createTable(cur, val);
+    // printTree(cur);
+    // printf("DONE");
+}
+
+void createTable(NODE *cur, double code)
+{
+    if(cur != NULL)
+    {
+        createTable(cur -> left, ((code*10)+0));
+        createTable(cur -> right, ((code*10) + 1));
+        if(cur -> left == NULL && cur -> right == NULL)
+        {
+            printf("%c:%lf\n", cur -> character, code);
+        }
+    }
 }
 
 void printTree(NODE *cur)
 {
-    // printf("REACHED");
     if (cur != NULL)
     {
         printTree(cur->left);
         printTree(cur->right);
         if(cur -> left == NULL && cur -> right == NULL)
         {
-        printf("%c:%d\n", cur->character, cur->frequency);
+            printf("%c:%d\n", cur->character, cur->frequency);
         }
     }
 }

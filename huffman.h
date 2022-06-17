@@ -69,6 +69,7 @@ void printTree(NODE *cur);
 void createTree(NODE **head);
 void updateList(NODE **head, NODE *node);
 NODE *addNode(NODE *node1, NODE *node2);
+void createTable(NODE *cur, double code);
 
 
 /* 
