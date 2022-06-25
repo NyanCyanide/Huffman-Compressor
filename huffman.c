@@ -14,6 +14,7 @@ int checkExtension(char *filename, char *extension)
     return strcmp(filename + strlen(filename) - strlen(extension), extension) == 0;
 }
 
+
 int fileExists(char *filename)
 {
     struct stat st;

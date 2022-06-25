@@ -5,11 +5,17 @@
 typedef struct node{
     char character;
     int frequency;
-    // int id;
     struct node *left;
     struct node *right;
     struct node *next;
 }NODE;
+
+typedef struct table{
+    char character;
+    unsigned int num;
+    int size;
+    struct table *next;
+}TABLE;
 
 
 // Function Names
@@ -65,11 +71,51 @@ NODE *sortedMerge(NODE *a, NODE *b);
 */
 void split(NODE *source, NODE **fhead, NODE **bhead);
 
+/*
+  * Prints the binary tree
+  * Uses recursion to print the tree
+  * Prints in the format <- Left -> <- Right -> <- Root -> (Post Order Traversal)
+*/
 void printTree(NODE *cur);
+
+/*
+  * Function that converts Linked list into Tree Structure
+  * Takes input as a Linked list and returns a Tree Structure
+*/
 void createTree(NODE **head);
+
+/*
+  * Function that updates list
+  * Function that takes subtree and adds to the linked list in ascending order
+*/
 void updateList(NODE **head, NODE *node);
+
+/*
+  * Function that creates a node
+  * Takes two node with minimum frequency of character and creates a new node
+  * making a subtree
+*/
 NODE *addNode(NODE *node1, NODE *node2);
-void createTable(NODE *cur, double code);
+
+/*
+  * Function that creates a table node
+  * Takes a character, character encoded value, and size of it
+  * which is used to make a linked list
+*/
+TABLE *getTableNode();
+
+/*
+  * Function that creates a table
+  * Takes a character and character encoded value, and size of it
+  * value is 'unsigned int' calculated in binary
+*/
+void createTable(TABLE** header, NODE *cur, unsigned int number, int size);
+
+/*
+  * Function that prints the table
+  * Takes a table and prints the table in the format
+*/
+void printTable(TABLE *head);
 
 
 /* 
@@ -91,5 +137,32 @@ int checkExtension(char *filename, char *extension);
   * argv[2] = <file name>
 */
 int conditions(char * argv[]);
+
+/*
+  * On work in naming the output file
+*/
+char *fileName(const char *filename);
+
+/*
+  * Function that finds the node that search based on the character
+*/
+TABLE *findNode(TABLE *head, char c);
+
+/*
+  * Function that startes the process of encoding the file
+  * Writes the data to the file in the form of binary
+  * Contains the table data and encoded data and also the offset of last character
+*/
+void fileEncoding(TABLE *head, const char *filename);
+
+/*
+  * Function that release the memory of NODE structure data type
+*/
+void freeSpace(NODE **head);
+
+/*
+  * Function that release the memory of TABLE structure data type
+*/
+void freeTable(TABLE **head);
 
 #endif
