@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include "huffman.h"
-
-// int id = 0;
 
 NODE *getNode()
 {
@@ -16,7 +13,6 @@ NODE *getNode()
     }
     node->next = NULL;
     node->frequency = 1;
-    // node->id = id++;
     node->left = NULL;
     node->right = NULL;
     return node;
@@ -24,13 +20,13 @@ NODE *getNode()
 
 TABLE *getTableNode()
 {
-    TABLE *node = (TABLE*)malloc(sizeof(TABLE));
-    if(node == NULL)
+    TABLE *node = (TABLE *)malloc(sizeof(TABLE));
+    if (node == NULL)
     {
         printf("Error: Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
-    node -> next = NULL;
+    node->next = NULL;
     return node;
 }
 
@@ -91,7 +87,6 @@ void printList(NODE *head)
     }
 }
 
-// Merge Sort Function
 void mergeSort(NODE **head)
 {
     NODE *cur = *head;
@@ -163,7 +158,7 @@ void encode(NODE **head, const char *filename)
     NODE *cur = *head;
     TABLE *header = NULL;
     char ch;
-    while((ch = fgetc(fp)) != EOF)
+    while ((ch = fgetc(fp)) != EOF)
     {
         cur = addList(ch, cur);
     }
@@ -174,46 +169,45 @@ void encode(NODE **head, const char *filename)
     // printTree(cur);
     createTable(&header, cur, 0b0, 0);
     freeSpace(&cur);
-    // printTable(header);
+    printTable(header);
     fileEncoding(header, filename);
-    // freeTable(&header);
+    freeTable(&header);
     printf("Successfully Encoded\n");
     exit(EXIT_SUCCESS);
 }
 
 void freeSpace(NODE **head)
 {
-    while(*head != NULL)
+    while (*head != NULL)
     {
         NODE *temp = *head;
         *head = (*head)->next;
-        temp -> next = NULL;
+        temp->next = NULL;
         free(temp);
     }
 }
 
 void freeTable(TABLE **head)
 {
-    while(*head != NULL)
+    while (*head != NULL)
     {
         TABLE *temp = *head;
         *head = (*head)->next;
-        temp -> next = NULL;
+        temp->next = NULL;
         free(temp);
     }
 }
 
-
 TABLE *findNode(TABLE *head, char c)
 {
     TABLE *cur = head;
-    while(cur != NULL)
+    while (cur != NULL)
     {
-        if(cur -> character == c)
+        if (cur->character == c)
         {
             return cur;
         }
-        cur = cur -> next;
+        cur = cur->next;
     }
 }
 
@@ -225,26 +219,26 @@ void fileEncoding(TABLE *head, const char *filename)
     unsigned char byte = 0b0;
     int overflow = 0;
     TABLE *temp = head;
-    while(temp != NULL)
+    while (temp != NULL)
     {
-        fprintf(dstfp, "%c:%d:%d ", temp -> character, temp -> num, temp -> size);
-        temp = temp -> next;
+        fprintf(dstfp, "%c:%d:%d ", temp->character, temp->num, temp->size);
+        temp = temp->next;
     }
     fprintf(dstfp, "##\n");
-    while((ch = fgetc(srcfp)) != EOF)
+    while ((ch = fgetc(srcfp)) != EOF)
     {
         TABLE *cur = findNode(head, ch);
-        int size = cur -> size;
-        unsigned int value = cur -> num;
-        while(size != 0)
+        int size = cur->size;
+        unsigned int value = cur->num;
+        while (size != 0)
         {
             int add = value & (1 << (size - 1));
-            if(add != 0)
+            if (add != 0)
             {
                 byte = byte | (1 << (7 - overflow));
             }
             overflow++;
-            if(overflow == 8)
+            if (overflow == 8)
             {
                 fwrite(&byte, sizeof(unsigned char), 1, dstfp);
                 byte = 0b0;
@@ -253,55 +247,51 @@ void fileEncoding(TABLE *head, const char *filename)
             size--;
         }
     }
-    if(overflow != 0)
+    if (overflow != 0)
     {
         fwrite(&byte, sizeof(unsigned char), 1, dstfp);
     }
-    fprintf(dstfp, " #%d", overflow);
+    fprintf(dstfp, "##%d", overflow);
+    fclose(srcfp);
+    fclose(dstfp);
 }
 
-
-
-void createTable(TABLE** header, NODE *cur, unsigned int number, int size)
+void createTable(TABLE **header, NODE *cur, unsigned int number, int size)
 {
-    if(cur != NULL)
+    if (cur != NULL)
     {
-        createTable(header, cur -> left, number<<1, size+1);
-        createTable(header, cur -> right, (number<<1) + 0b1, size+1);
-        if(cur -> left == NULL && cur -> right == NULL)
+        createTable(header, cur->left, number << 1, size + 1);
+        createTable(header, cur->right, (number << 1) + 0b1, size + 1);
+        if (cur->left == NULL && cur->right == NULL)
         {
-            if(*header == NULL)
+            if (*header == NULL)
             {
                 *header = getTableNode();
-                (*header) -> character = cur -> character;
-                (*header) -> num = number;
-                (*header) -> size = size;
+                (*header)->character = cur->character;
+                (*header)->num = number;
+                (*header)->size = size;
             }
             else
             {
                 TABLE *temp = getTableNode();
-                temp -> character = cur -> character;
-                temp -> num = number;
-                temp -> size = size;
-                temp -> next = *header;
+                temp->character = cur->character;
+                temp->num = number;
+                temp->size = size;
+                temp->next = *header;
                 *header = temp;
             }
         }
-
     }
 }
-
 
 void printTable(TABLE *head)
 {
-    while(head != NULL)
+    while (head != NULL)
     {
-        printf("Character = '%c' Number = '%d' Size = '%d'\n", head -> character, head -> num, head -> size);
-        head = head -> next;
+        printf("Character = '%c' Number = '%d' Size = '%d'\n", head->character, head->num, head->size);
+        head = head->next;
     }
 }
-
-
 
 void printTree(NODE *cur)
 {
@@ -309,7 +299,7 @@ void printTree(NODE *cur)
     {
         printTree(cur->left);
         printTree(cur->right);
-        if(cur -> left == NULL && cur -> right == NULL)
+        if (cur->left == NULL && cur->right == NULL)
         {
             printf("%c:%d\n", cur->character, cur->frequency);
         }

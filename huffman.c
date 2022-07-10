@@ -14,7 +14,6 @@ int checkExtension(char *filename, char *extension)
     return strcmp(filename + strlen(filename) - strlen(extension), extension) == 0;
 }
 
-
 int fileExists(char *filename)
 {
     struct stat st;
@@ -51,21 +50,16 @@ int conditions(char *argv[])
 
 void process(char *argv[])
 {
-    NODE *head = NULL;
     if (strcmp(argv[1], "-encode") == 0)
     {
+        NODE *head = NULL;
         encode(&(head), argv[2]);
     }
     else if (strcmp(argv[1], "-decode") == 0)
     {
+        TABLE *head = NULL;
         decode(&(head), argv[2]);
     }
 }
 
 
-
-void decode(NODE **head, const char *filename)
-{
-    FILE *fp = fopen(filename, "r");
-    printf("REACHED DECODE");
-}
