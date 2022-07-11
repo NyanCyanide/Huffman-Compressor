@@ -61,7 +61,8 @@ void decode(TABLE **head, const char *filename)
         }
     }
     sch = fgetc(fp);
-    unsigned char c1, c2, c0;
+    unsigned char c1, c2, c0, c3;
+    c3 = fgetc(fp);
     c0 = fgetc(fp);
     c1 = fgetc(fp);
     c2 = fgetc(fp);
@@ -73,11 +74,11 @@ void decode(TABLE **head, const char *filename)
     strncpy(hufffile, filename, (strlen(filename) - 5));
     hufffile[strlen(filename) - 5] = '\0';
     FILE *noice = fopen(hufffile, "w+");
-    while (!(c1 == '#' && c2 == '#'))
+    while (!(c0 == '#' && c1 == '#' && c2 == '#'))
     {
         while (overflow != 0)
         {
-            if ((c0 & (1 << (overflow - 1))) == 0)
+            if ((c3 & (1 << (overflow - 1))) == 0)
             {
                 tempch = tempch << 1;
             }
@@ -95,6 +96,7 @@ void decode(TABLE **head, const char *filename)
             }
         }
         overflow = 8;
+        c3 = c0;
         c0 = c1;
         c1 = c2;
         c2 = fgetc(fp);
@@ -107,7 +109,7 @@ void decode(TABLE **head, const char *filename)
     {
         gotch = 8;
     }
-    fseek(fp, -4, SEEK_END);
+    fseek(fp, -5, SEEK_END);
     asdch = fgetc(fp);
     while(gotch != 0)
     {
@@ -131,6 +133,7 @@ void decode(TABLE **head, const char *filename)
     }
     fclose(fp);
     fclose(noice);
+    freeTable(&(*head));
     printf("Successfully Decoded\n");
     exit(EXIT_SUCCESS);
 }

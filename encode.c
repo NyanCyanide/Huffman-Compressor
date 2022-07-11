@@ -215,7 +215,6 @@ void fileEncoding(TABLE *head, const char *filename)
     char *hufffile = (char *)malloc(sizeof(char) * (strlen(filename) + 5));
     strcpy(hufffile, filename);
     strcat(hufffile, ".huff");  
-
     FILE *dstfp = fopen(hufffile, "wb+");
     char ch;
     unsigned char byte = 0b0;
@@ -253,7 +252,7 @@ void fileEncoding(TABLE *head, const char *filename)
     {
         fwrite(&byte, sizeof(unsigned char), 1, dstfp);
     }
-    fprintf(dstfp, "##%d", overflow);
+    fprintf(dstfp, "###%d", overflow);
     fclose(srcfp);
     fclose(dstfp);
 }
