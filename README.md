@@ -47,7 +47,9 @@ Characters with more frequency have less binary encoded digits and vice versa.
 ![Data Structure node](https://raw.githubusercontent.com/NyanCyanide/Huffman-Compressor/main/Assets/Datastructure.png)
 <div></div>
 I have used a mixture of **Linked list** and **Binary Tree** data Structure. Above is a example node which contains *character* to store the characters present in the text, and *frequency* to store the number of repeatedly appearing characters. *Next* is a pointer used for **Linked list**, and *Left* and *Right* is used **Binary Tree**.
+
 ### Method
+
 Considering the sample example:
 
     hello world he rolls
@@ -61,8 +63,11 @@ From the Linked list, Tree is created in such a way that, the two nodes are chos
 
 <div></div>
 We can observe that the leaf nodes are the characters that is present in text(true for all text). Now, to encode each character with binary. We should encode in such a way that traversing to left is **left shifting once** (Example: 1 << 1 = 10 in binary) and traversing to right is **left shifting once and adding 1** (Example: (1 << 1) + 1 = 11 in binary). Similarly this is done to all characters. For character 'd' it is encoded as '0010' as so on. Then the table is imported. Hence the Compressed file is created.
+
 ## Huffman Decoding
+
 ### Method
+
 For Decoding the compressed file, using the [table](https://github.com/NyanCyanide/Huffman-Compressor#Table) I can recreate the original file. I do this by taking first 8 bits (or byte), compare the bits with the corresponding table, and print out to the file. I repeat this process unless all the bits are done.
 **Interesting Fact** : Binary Encoded Values are created in such a way that they do not overlap with other binary values. For example consider character 'h' = 100 and character 'e' = 0100, they both do not overlap each other (always consider taking from left).
 
