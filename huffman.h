@@ -165,6 +165,10 @@ void freeSpace(NODE **head);
  */
 void freeTable(TABLE **head);
 
+/*
+ * Function that checks if the value and size associated with character is present in the table
+ * if so returns the character or else return '\0'
+*/
 char findCharacter(TABLE *head, unsigned int number, int size);
 
 #endif
