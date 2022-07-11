@@ -6,7 +6,7 @@
 
 void message()
 {
-    printf("Usage:\n\tcompress.exe <type> <filename>\n\ttype:\n\t\t-encode\n\t\t-decode\n\textension:\n\t\t.txt\n\t\t.huff\n\t\t.json\n");
+    printf("Usage:\n\tcompress.exe <type> <filepath>\n\ttype:\n\t\t-encode\n\t\t-decode\n\textension:\n\t\tencode:\n\t\t\t.any\n\t\tdecode:\n\t\t\t.huff\n");
 }
 
 int checkExtension(char *filename, char *extension)

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "huffman.h"
 
-/*gcc -o "huffman" "client.c" "huffman.c" "encode.c" "decode.c"*/
+/*gcc -Wall -save-temps "client.c" "encode.c" "decode.c" "huffman.c" -o "Huffman.exe"*/
 
 int main(int argc, char *argv[])
 {

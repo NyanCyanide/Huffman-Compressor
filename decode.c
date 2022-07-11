@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "huffman.h"
 
 char findCharacter(TABLE *head, unsigned int number, int size)
@@ -9,7 +10,6 @@ char findCharacter(TABLE *head, unsigned int number, int size)
     {
         if ((cur->num == number) && (cur->size == size))
         {
-            // printf("%c ", cur -> character);
             return cur->character;
         }
         cur = cur->next;
@@ -20,8 +20,6 @@ char findCharacter(TABLE *head, unsigned int number, int size)
 void decode(TABLE **head, const char *filename)
 {
     FILE *fp = fopen(filename, "rb");
-    // TABLE *cur = *head;
-
     char fch = fgetc(fp);
     char sch = fgetc(fp);
     unsigned int val;
@@ -62,9 +60,7 @@ void decode(TABLE **head, const char *filename)
             *head = temp;
         }
     }
-    printTable(*head);
     sch = fgetc(fp);
-
     unsigned char c1, c2, c0;
     c0 = fgetc(fp);
     c1 = fgetc(fp);
@@ -73,7 +69,10 @@ void decode(TABLE **head, const char *filename)
     char mych;
     int size = 0;
     int overflow = 8;
-    FILE *noice = fopen("./decode.huff", "w+");
+    char *hufffile = (char *)malloc(sizeof(char) * (strlen(filename) - 4));
+    strncpy(hufffile, filename, (strlen(filename) - 5));
+    hufffile[strlen(filename) - 5] = '\0';
+    FILE *noice = fopen(hufffile, "w+");
     while (!(c1 == '#' && c2 == '#'))
     {
         while (overflow != 0)
@@ -100,12 +99,14 @@ void decode(TABLE **head, const char *filename)
         c1 = c2;
         c2 = fgetc(fp);
     }
-
     overflow = 8;
     fseek(fp, -1, SEEK_END);
     char asdch = fgetc(fp);
     int gotch = (asdch - '0');
-    // size = size + gotch;
+    if(gotch == 0)
+    {
+        gotch = 8;
+    }
     fseek(fp, -4, SEEK_END);
     asdch = fgetc(fp);
     while(gotch != 0)
@@ -128,6 +129,8 @@ void decode(TABLE **head, const char *filename)
             size = 0;
         }
     }
-
-    printf("File Decoded Successfully\n");
+    fclose(fp);
+    fclose(noice);
+    printf("Successfully Decoded\n");
+    exit(EXIT_SUCCESS);
 }

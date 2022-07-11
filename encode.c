@@ -164,12 +164,9 @@ void encode(NODE **head, const char *filename)
     }
     fclose(fp);
     mergeSort(&cur);
-    // printList(cur);
     createTree(&cur);
-    // printTree(cur);
     createTable(&header, cur, 0b0, 0);
     freeSpace(&cur);
-    printTable(header);
     fileEncoding(header, filename);
     freeTable(&header);
     printf("Successfully Encoded\n");
@@ -209,12 +206,17 @@ TABLE *findNode(TABLE *head, char c)
         }
         cur = cur->next;
     }
+    return NULL;
 }
 
 void fileEncoding(TABLE *head, const char *filename)
 {
     FILE *srcfp = fopen(filename, "r");
-    FILE *dstfp = fopen("./encode.huff", "wb+");
+    char *hufffile = (char *)malloc(sizeof(char) * (strlen(filename) + 5));
+    strcpy(hufffile, filename);
+    strcat(hufffile, ".huff");  
+
+    FILE *dstfp = fopen(hufffile, "wb+");
     char ch;
     unsigned char byte = 0b0;
     int overflow = 0;
