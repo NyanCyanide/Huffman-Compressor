@@ -56,7 +56,9 @@ I created a linked list which looks like this:
 <div></div>
 Where the above box represents the frequency and below is the character.
 From the Linked list, Tree is created in such a way that, the two nodes are chosen with least frequency. the smallest frequency node comes to left and the greater one comes to right and a subtree is created. This process is done when there is no linked list nodes created. Just like the image below:
+
 ![Binary Tree](https://raw.githubusercontent.com/NyanCyanide/Huffman-Compressor/main/Assets/Tree.png)
+
 <div></div>
 We can observe that the leaf nodes are the characters that is present in text(true for all text). Now, to encode each character with binary. We should encode in such a way that traversing to left is **left shifting once** (Example: 1 << 1 = 10 in binary) and traversing to right is **left shifting once and adding 1** (Example: (1 << 1) + 1 = 11 in binary). Similarly this is done to all characters. For character 'd' it is encoded as '0010' as so on. Then the table is imported. Hence the Compressed file is created.
 ## Huffman Decoding
