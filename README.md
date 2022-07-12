@@ -88,24 +88,29 @@ For Decoding the compressed file, using the [table](https://github.com/NyanCyani
  ![Sample 1](https://raw.githubusercontent.com/NyanCyanide/Huffman-Compressor/main/Assets/sample1.png)
 
 <div></div>
+
  **2. Sample2.txt**
  - Original File size: 1,26,031 bytes
  - Compressed File size: 68,929 bytes
  - Compression Rate: ~45.3%
+ 
  <div></div>
  
 ![Sample 2](https://raw.githubusercontent.com/NyanCyanide/Huffman-Compressor/main/Assets/sample1.png)
 
 <div></div>
+
  **3. Sample3.txt**
  - Original File size: 65,13,820 bytes
  - Compressed File size: 34,37,414 bytes
  - Compression Rate: ~47.23%
+ 
  <div></div>
  
 ![Sample 3](https://raw.githubusercontent.com/NyanCyanide/Huffman-Compressor/main/Assets/sample3.png)
 
 <div></div>
+
 From this I can conclude the compression rate is around ~46%. Which is not bad!😀
 
 ## Executing
